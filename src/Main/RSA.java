@@ -35,7 +35,7 @@ public class RSA {
 
 
         e = generateE(BigInteger.valueOf(random.nextInt()), f).intValue();
-        while (e<0)
+        while (e<0 && e%2==0)
             e = generateE(BigInteger.valueOf(random.nextInt()), f).intValue();
 
         x = EEA.EEA(BigInteger.valueOf(e),f);
