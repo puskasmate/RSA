@@ -30,12 +30,20 @@ public class RSA {
         while(p.equals(q)){
             p=BigInteger.probablePrime(32, random);
         }
+
+        while (!MR.isPrime(p)){
+            p = BigInteger.probablePrime(32,random);
+        }
+
+        while (!MR.isPrime(q)){
+            q = BigInteger.probablePrime(32,random);
+        }
         n = p.multiply(q);
         f = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
 
 
         e = generateE(BigInteger.valueOf(random.nextInt()), f).intValue();
-        while (e<0 && e%2==0)
+        while (e<0 || e%2==0)
             e = generateE(BigInteger.valueOf(random.nextInt()), f).intValue();
 
         x = EEA.EEA(BigInteger.valueOf(e),f);
@@ -85,5 +93,7 @@ public class RSA {
         }
         return e;
     }
+
+
 
 }

@@ -27,11 +27,13 @@ public class Main {
         if(s.charAt(0)=='e') {
             BigInteger sec = RSA.Encrypt(msg);
             System.out.println("A titkosított üzenet: "+sec);
+            System.out.println(RSA.Decrypt(sec));
         }
 
         if(s.charAt(0)=='d') {
             BigInteger br = RSA.Decrypt(msg);
             System.out.println("A tört üzenet: "+br);
+            System.out.println(RSA.Encrypt(br));
         }
 
     }

@@ -1,65 +1,54 @@
 package Main;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+
 
 
 public class MR {
 
-        public static boolean isPrime(BigInteger p,BigInteger a){
-            if(p.intValue()>3 && (a.intValue()>=2 && a.compareTo(p)==-1)){
 
-                if(p.mod(BigInteger.TWO).equals(BigInteger.ZERO)){
-                    return false;
-                }
 
-                int aMax = p.subtract(BigInteger.ONE).intValue();
-                int aMin = a.intValue()+1;
-                List<BigInteger> aValues = new ArrayList<>();
-                aValues.add(a);
-                for(int i = 0; i<2;i++){
-                    aValues.add(generateRandomBigInteger(aMin,aMax));
-                }
+        private  static BigInteger d;
+        private  static int r=0;
+        private static int count = 0;
 
-                BigInteger d = p.subtract(BigInteger.ONE);
-                int s =0;
-                while (d.mod(BigInteger.TWO).equals(BigInteger.ZERO)){
-                    d = d.divide(BigInteger.TWO);
-                    s++;
-                }
 
-                BigInteger t;
-                int checkIfPrimeCount = 0;
-                int checkForAllA = 0;
-                for (BigInteger aValue : aValues) {
-                    t = FME.Fme(aValue,d, p);
-                    if(t.equals(BigInteger.ONE)){
-                        checkIfPrimeCount++;
-                    }
-                    for (int i = 0; i < s; i++) {
-                        t = FME.Fme(aValue,BigInteger.valueOf(2).pow(i).multiply(d), p);
-                        if (t.equals(BigInteger.valueOf(-1))) {
-                            checkIfPrimeCount++;
-                        }
-                    }
-                    if(checkIfPrimeCount==s){
-                        checkForAllA++;
-                    }
-                }
-                return checkForAllA == aValues.size();
+        private FME fme = new FME();
+
+        public static boolean isPrime(BigInteger n){
+            getRandD(n);
+
+            if((FME.Fme(BigInteger.TWO,d,n).equals(BigInteger.valueOf(1)))&&(FME.Fme(BigInteger.TEN,d,n).equals(BigInteger.valueOf(1)))&&(FME.Fme(BigInteger.valueOf(5),d,n).equals(BigInteger.valueOf(1)))){
+                count++;
             }
-            throw new IllegalArgumentException("Wrong arguments: p must be > 3 and a must be >=2 and <p");
 
+            for(int i = 0; i< r; i++){
+                if(FME.Fme(BigInteger.TWO, d.multiply(BigInteger.valueOf((long) Math.pow(2,i))),n).equals(BigInteger.valueOf(-1))){
+                    count++;
+                }
+                if(FME.Fme(BigInteger.TEN, (d.multiply(BigInteger.valueOf((long) Math.pow(2,i)))),n).equals(BigInteger.valueOf(-1))){
+                    count++;
+                }
+                if(FME.Fme(BigInteger.valueOf(5), (d.multiply(BigInteger.valueOf((long) Math.pow(2,i)))),n).equals(BigInteger.valueOf(-1))){
+                    count++;
+                }
+            }
+
+            return count >= 3;
         }
-        public static BigInteger generateRandomBigInteger(int min, int max){
-            Random random = new Random();
+        public static void getRandD(BigInteger n){
 
-                return BigInteger.valueOf(random.nextInt((max - min) + 1)+ min);
+            if(!((n.remainder(BigInteger.TWO)).equals(BigInteger.ZERO))){
+                n = n.subtract(BigInteger.ONE);
+            }
 
-
+            while (((n.remainder(BigInteger.TWO)).equals(BigInteger.ZERO))){
+                n = n.divide(BigInteger.TWO);
+                r++;
+            }
+            d = n;
         }
+
     }
 
 
